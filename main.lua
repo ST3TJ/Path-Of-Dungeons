@@ -15,19 +15,18 @@ local map = {}
 local size = 10
 
 function map:init()
-    for x = 1, size do
-        map[x] = {}
-        for y = 1, size do
-            if (x == 1 or y == 1) or (x == size or y == size) then
-                map[x][y] = 1
-            else
-                map[x][y] = 0
-            end
-        end
-    end
-
-    map[5][3] = 1
-    map[6][3] = 1
+    map = {
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0.3 },
+        { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 1, 1, 1, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    }
 
     self.init = nil
 end
@@ -58,8 +57,8 @@ local function get_move_direction()
 end
 
 function checkCollision(x, y, width, height)
-    for i = math.floor(x), math.floor(x + width - 0.01) do
-        for j = math.floor(y), math.floor(y + height - 0.01) do
+    for j = math.floor(x), math.floor(x + width - 0.01) do
+        for i = math.floor(y), math.floor(y + height - 0.01) do
             if map[i] and map[i][j] == 1 then
                 return true
             end
@@ -98,7 +97,7 @@ function love.draw()
 
     for x = 1, size do
         for y = 1, size do
-            love.graphics.setColor(map[x][y], map[x][y], map[x][y])
+            love.graphics.setColor(map[y][x], map[y][x], map[y][x])
             love.graphics.rectangle('fill', (x - 1) * w, (y - 1) * h, w, h)
         end
     end
