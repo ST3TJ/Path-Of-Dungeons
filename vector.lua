@@ -167,5 +167,3 @@ function vector(x, y, z)
         z = z
     }, vector_mt)
 end
-
-print(tostring(vector()))

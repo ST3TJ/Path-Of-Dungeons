@@ -61,9 +61,8 @@ function love.update(dt)
 
     move = move * dt
 
-    player.velocity = player.velocity + move
+    player.velocity = (player.velocity + move) / game_rules.friction
     player.origin = player.origin + player.velocity
-    player.velocity = player.velocity / game_rules.friction
 end
 
 function love.draw()
