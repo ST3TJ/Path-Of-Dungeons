@@ -2,7 +2,7 @@ require('header')
 
 local player = {
     origin = vector(2),
-    size = vector(.5),
+    size = vector(0.5, 0.85),
     speed = 1.5,
     velocity = vector(),
 }
@@ -27,6 +27,7 @@ function map:init()
     end
 
     map[5][3] = 1
+    map[6][3] = 1
 
     self.init = nil
 end
@@ -56,13 +57,39 @@ local function get_move_direction()
     return move
 end
 
+function checkCollision(x, y, width, height)
+    for i = math.floor(x), math.floor(x + width - 0.01) do
+        for j = math.floor(y), math.floor(y + height - 0.01) do
+            if map[i] and map[i][j] == 1 then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function love.update(dt)
     local move = get_move_direction()
-
     move = move * dt
 
     player.velocity = (player.velocity + move) / game_rules.friction
-    player.origin = player.origin + player.velocity
+
+    local predicted_origin_x = player.origin + vector(player.velocity.x, 0)
+    local predicted_origin_y = player.origin + vector(0, player.velocity.y)
+
+    if not checkCollision(predicted_origin_x.x, player.origin.y, player.size.x, player.size.y) then
+        player.origin.x = predicted_origin_x.x
+    else
+        player.velocity.x = 0
+    end
+
+    if not checkCollision(player.origin.x, predicted_origin_y.y, player.size.x, player.size.y) then
+        player.origin.y = predicted_origin_y.y
+    else
+        player.velocity.y = 0
+    end
+
+    player.velocity = player.velocity / game_rules.friction
 end
 
 function love.draw()
@@ -77,5 +104,5 @@ function love.draw()
     end
 
     love.graphics.setColor(1, 0.6, 0.6)
-    love.graphics.rectangle('fill', (player.origin[1] - 1) * w, (player.origin[2] - 1) * h, player.size.x * w, player.size.y * h)
+    love.graphics.rectangle('fill', (player.origin.x - 1) * w, (player.origin.y - 1) * h, player.size.x * w, player.size.y * h)
 end
