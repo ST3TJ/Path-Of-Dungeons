@@ -21,10 +21,16 @@ local function get_move_direction()
     return move
 end
 
-function checkCollision(x, y, width, height)
+---@param x number
+---@param y number
+---@param width number
+---@param height number
+---@param id any?
+---@return boolean
+function checkCollision(x, y, width, height, id)
     for j = math.floor(x), math.floor(x + width - 0.01) do
         for i = math.floor(y), math.floor(y + height - 0.01) do
-            if map[i] and map[i][j] == 1 then
+            if map[i] and map[i][j] == (id or 1) then
                 return true
             end
         end
@@ -33,6 +39,19 @@ function checkCollision(x, y, width, height)
 end
 
 function createmove(dt)
+    if IsTransition(player.origin:unpack(2)) then
+        printf('Transiting')
+        generateMap()
+        for x = 2, MAP_SIZE - 1 do
+            for y = 2, MAP_SIZE - 1 do
+                if map[x][y] == 0 then
+                    player.origin = vector(x, y)
+                    break
+                end
+            end
+        end
+    end
+
     local move = get_move_direction()
     move = move * dt
 

@@ -1,4 +1,4 @@
-local size = 10
+local size = MAP_SIZE
 
 function draw()
     local w, h = love.graphics.getDimensions()

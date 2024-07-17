@@ -1,3 +1,4 @@
+ffi = require('ffi')
 require('src.global')
 require('src.vector')
 require('src.settings')
